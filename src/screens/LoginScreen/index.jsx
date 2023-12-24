@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,6 +7,7 @@ import {
   TextInput,
   Touchable,
   TouchableOpacity,
+  KeyboardAvoidingView
 } from "react-native";
 import Logo from "../../../assets/logo/logo.png";
 import large_red from "../../../assets/Home/large_red.png";
@@ -14,8 +16,22 @@ import large_pink from "../../../assets/Home/large_pink.png";
 import small_pink from "../../../assets/Home/small_pink.png";
 import medium_pink from "../../../assets/Home/medium_pink.png";
 import { ActivityIndicator, MD2Colors, useTheme } from "react-native-paper";
+import CountryPicker from 'react-native-country-picker-modal';
 export default function LoginScreen({ navigation }) {
   const theme = useTheme();
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const onCountrySelect = (country) => {
+    setSelectedCountry(country);
+  };
+  const handleNextPress = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false); 
+      navigation.navigate('OTP');
+    }, 2000); 
+  };
   const styles = StyleSheet.create({
     LogoText: {
       color: theme.colors.primary,
@@ -25,9 +41,12 @@ export default function LoginScreen({ navigation }) {
     },
     container: {
       flex: 1,
+      flexDirection: 'column',
       backgroundColor: "#fff",
       alignItems: "center",
       justifyContent: "center",
+      paddingHorizontal: '3%'
+      
     },
     LoaderContainer: {
       position: "absolute",
@@ -92,22 +111,95 @@ export default function LoginScreen({ navigation }) {
       borderWidth: 1,
       padding: 10,
     },
+    heading: {
+      fontSize: 25, 
+      fontWeight: '700', 
+      paddingVertical: 30
+    },
+    text: {
+      fontSize: 16,
+      fontWeight: '400',
+      padding: 20
+    },
+    countryPickerButton: {
+      marginTop: 10,
+      width: 280,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderWidth: 1,
+      borderBottomColor: theme.colors.primary,
+      borderLeftWidth: 0,
+      borderRightWidth: 0,
+      borderTopColor: 0,
+    },
+    selectedCountry: {
+      marginTop: 20,
+      fontSize: 16,
+    },
+    selectedCountryCode: {
+      height: 40,
+      margin: 12,
+      width: 50,
+      borderLeftWidth: 0,
+      borderRightWidth: 0,
+      borderTopColor: theme.colors.primary,
+      borderBottomColor: theme.colors.primary,
+      borderWidth: 1,
+      padding: 10,
+    },
+    display: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginTop: 20
+    },
+    activityIndicator: {
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    loadingBackground: {
+      backgroundColor: 'rgba(0, 0, 0, 0.1)', // Grey background color with 50% opacity
+    },
+
   });
   return (
-    <View style={styles.container}>
-      <Text style={{ fontSize: 20, fontWeight: 700 }}>
+    <KeyboardAvoidingView style={[styles.container, loading && styles.loadingBackground]}>
+      <Text style={styles.heading}>
         Enter Your Phone Number
       </Text>
-      <Text style={{ fontSize: 12, fontWeight: 400 }}>
-        SignaChat will need to verify your phone number
+      <Text style={styles.text}>
+        SignaChat will need to verify your phone number.
+        <Text style={{color: theme.colors.primary}}>  What's my number</Text>
       </Text>
-      <TextInput
+       <CountryPicker
+        {...{
+          countryCode: selectedCountry?.cca2,
+          onSelect: onCountrySelect,
+          withFlag: true,
+          withFilter: true,
+          withCountryNameButton: true,
+          withAlphaFilter: true,
+          withCallingCode: true,
+          withEmoji: true,
+          containerButtonStyle: styles.countryPickerButton,
+        }}
+      />
+      {selectedCountry && (
+        <View style={styles.display}>
+        <Text style={styles.selectedCountryCode}>
+        +{selectedCountry?.callingCode[0]}
+        </Text>
+        <TextInput
         style={styles.Input}
-        placholder="xxx-xxxxxxx"
+        value={phoneNumber}
+        onChange={(text)=> {setPhoneNumber(text)}}
+        placeholder="xxx-xxxxxxx"
         keyboardType="numeric"
         keyboardAppearance="dark"
         maxLength={11}
       />
+      </View>
+      )}
       <Text
         style={{
           fontSize: 12,
@@ -127,7 +219,8 @@ export default function LoginScreen({ navigation }) {
             backgroundColor: theme.colors.primary,
             color: theme.colors.secondary,
           }}
-          onPress={() => navigation.navigate("Splash")}
+          onPress={handleNextPress}
+          disabled={loading}
         >
           <Text
             style={{
@@ -137,13 +230,19 @@ export default function LoginScreen({ navigation }) {
             Next
           </Text>
         </TouchableOpacity>
-        {/* <ActivityIndicator
-          size={36}
-          animating={true}
-          color={theme.colors.primary}
-        /> */}
-        {/* <Text style={styles.LogoText}>Loading...</Text> */}
-      </View>
-    </View>
+        </View>
+        <View style={styles.activityIndicator}>
+        {loading && (
+          <ActivityIndicator
+            size={36}
+            animating={true}
+            color={theme.colors.primary}
+          />
+        )}
+        {loading && <Text style={styles.LogoText}>Loading...</Text>}
+        </View>
+      
+    </KeyboardAvoidingView>
+    
   );
 }
