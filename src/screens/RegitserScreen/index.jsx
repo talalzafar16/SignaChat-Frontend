@@ -25,8 +25,6 @@ import { useDispatch, useSelector } from "react-redux";
 export default function LoginScreen({ navigation, route }) {
   const { number } = route.params;
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.data);
-  console.log("jjj", data);
   const theme = useTheme();
   const [selectedGender, setSelectedGender] = useState(null);
   const [loading, setLoading] = useState(false);

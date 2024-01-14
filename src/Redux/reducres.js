@@ -9,7 +9,6 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     updateUser: (state, action) => {
-      console.log(action.payload, "form red");
       state.data = {
         ...state.data,
         ...action.payload,

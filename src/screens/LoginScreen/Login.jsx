@@ -23,7 +23,6 @@ function Login({ navigation }) {
   const [phoneNumber, setPhoneNumber] = useState("");
   const handleSubmit = () => {
     if (phoneNumber.length == 11) {
-      console.log(process.env.EXPO_PUBLIC_SERVER_UR);
       fetch(`http://192.168.43.7:8000/api/v1/auth/login`, {
         method: "POST",
         headers: {
@@ -37,8 +36,8 @@ function Login({ navigation }) {
             console.log(data.existingUser, "inn data");
             navigation.navigate("OTP", {
               number: phoneNumber,
-              // existingUser: data.existingUser,
-              existingUser: false,
+              existingUser: data.existingUser,
+              // existingUser: false,
             });
           } else {
             Dialog.show({

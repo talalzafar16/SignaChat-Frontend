@@ -81,11 +81,9 @@ export default function SplashScreen() {
     },
   });
   useEffect(() => {
-    console.log("objejkct");
     const timeout = setTimeout(() => {
       navigation.navigate("Login");
     }, 3000);
-    console.log("object");
     return () => clearTimeout(timeout);
   }, [navigation]);
   return (

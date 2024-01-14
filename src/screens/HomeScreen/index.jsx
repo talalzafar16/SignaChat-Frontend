@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -21,7 +21,10 @@ import AddContact from "../AddContact";
 
 function HomeScreen({ navigation }) {
   const Tab = createMaterialTopTabNavigator();
-  const Stack = createNativeStackNavigator();
+  const [settingModal, setSettingModal] = useState(false);
+  let handlesettingmodal = () => {
+    setSettingModal(!settingModal);
+  };
   return (
     <>
       <View style={styles.container}>
@@ -38,19 +41,16 @@ function HomeScreen({ navigation }) {
             color="white"
           />
         </Pressable>
-        <Pressable
-          onPress={() => {
-            navigation.navigate("Setting");
-          }}
-        >
+        <TouchableOpacity onPress={handlesettingmodal}>
           <Entypo
             style={styles.menuBtn}
             name="dots-three-vertical"
             size={24}
             color="white"
           />
-        </Pressable>
+        </TouchableOpacity>
       </View>
+
       <Tab.Navigator
         screenOptions={{
           tabBarActiveTintColor: "#ffffff",
@@ -103,5 +103,10 @@ const styles = StyleSheet.create({
   menuBtn: {
     top: 30,
     left: 60,
+  },
+  modal: {
+    height: 200,
+    width: 200,
+    backgroundColor: "black",
   },
 });
