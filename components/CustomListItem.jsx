@@ -60,14 +60,28 @@ function CustomListItem() {
       }}
     >
       <Image
-        source={{ uri: item.image }}
+        source={{ uri: item.data.image }}
         style={{ width: 60, height: 60, borderRadius: 99 }}
       />
       <ListItem.Content>
-        <ListItem.Title style={{ fontWeight: 800 }}>{item.name}</ListItem.Title>
-        <ListItem.Subtitle numberOfLines={1} ellipsizeMode="tail">
-          {item.number}
-        </ListItem.Subtitle>
+        <ListItem.Title style={{ fontWeight: 800 }}>
+          {item.data.name}
+        </ListItem.Title>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <ListItem.Subtitle numberOfLines={1} ellipsizeMode="tail">
+            {item.content}
+          </ListItem.Subtitle>
+          <ListItem.Subtitle numberOfLines={1} ellipsizeMode="tail">
+            {new Date(item.createdAt).getUTCHours()}:
+            {new Date(item.createdAt).getUTCMinutes()}
+          </ListItem.Subtitle>
+        </View>
       </ListItem.Content>
     </ListItem>
   );
@@ -75,7 +89,11 @@ function CustomListItem() {
   const keyExtractor = (item) => item._id;
 
   const navigateToChatScreen = (item) => {
-    navigation.navigate("ChatScreen", { name: item.name, avatar: item.avatar });
+    navigation.navigate("ChatScreen", {
+      name: item.data.name,
+      image: item.data.image,
+      id: item.data._id,
+    });
   };
 
   return (
