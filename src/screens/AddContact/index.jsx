@@ -16,6 +16,7 @@ import ComponentContact from "../../../components/ComponentContact";
 function AddContact() {
   const [searchContact, setSearchContact] = useState();
   const [showField, setShowField] = useState(false);
+  const [refetch, setRefetch] = useState(false);
   const [chatData, setChatData] = useState([]);
 
   const handle = () => {
@@ -48,7 +49,7 @@ function AddContact() {
   }, []);
   useEffect(() => {
     fetchAPIData();
-  }, [searchContact]);
+  }, [searchContact, refetch]);
   const handleNameInput = (text) => {
     setSearchContact(text);
   };
@@ -110,7 +111,13 @@ function AddContact() {
         <FlatList
           data={chatData}
           keyExtractor={(item) => item._id}
-          renderItem={({ item }) => <ComponentContact item={item} />}
+          renderItem={({ item }) => (
+            <ComponentContact
+              refetch={refetch}
+              setRefetch={setRefetch}
+              item={item}
+            />
+          )}
         />
       </ScrollView>
     </View>

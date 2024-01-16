@@ -12,7 +12,7 @@ import {
 } from "react-native-alert-notification";
 import { DialogCustomColors } from "../src/config/colors";
 
-function ComponentContact({ item }) {
+function ComponentContact({ item, refetch, setRefetch }) {
   const InitialData = useSelector((state) => state.data);
   const [flag, setFlag] = useState(false);
 
@@ -36,7 +36,7 @@ function ComponentContact({ item }) {
         if (data.success) {
           Dialog.show({
             type: ALERT_TYPE.SUCCESS,
-            title: "INVALID",
+            title: "Success",
             textBody: "Added contact",
             button: "close",
           });
@@ -50,6 +50,7 @@ function ComponentContact({ item }) {
           textBody: error.message,
           button: "close",
         });
+        setRefetch(!refetch);
       });
   };
   useEffect(() => {
@@ -65,7 +66,7 @@ function ComponentContact({ item }) {
   return (
     <ListItem bottomDivider>
       <Image
-        source={{ uri: item?.image }}
+        source={{ uri: `data:image/jpeg;base64,${item?.image}` }}
         style={{ width: 60, height: 60, borderRadius: 99 }}
       />
       <ListItem.Content>

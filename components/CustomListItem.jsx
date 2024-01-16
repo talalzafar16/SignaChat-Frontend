@@ -33,27 +33,6 @@ function CustomListItem() {
         }
       });
   }, [navigation]);
-  //   const chatData = [
-  //     {
-  //       id: "1",
-  //       name: "Bajwa",
-  //       message: "I'm gonna smash your boy ",
-  //       avatar: Ali,
-  //     },
-  //     {
-  //       id: "2",
-  //       name: "Khabib",
-  //       message: "If you wanna find me, Send me location.",
-  //       avatar: Khabib,
-  //     },
-  //     {
-  //       id: "3",
-  //       name: "Khamzat",
-  //       message: "I'm coming for everybody, kill everybody",
-  //       avatar: Khamzat,
-  //     },
-  //     // Add more chat items as needed
-  //   ];
 
   const renderItem = ({ item }) => (
     <ListItem
@@ -63,7 +42,7 @@ function CustomListItem() {
       }}
     >
       <Image
-        source={{ uri: item.data.image }}
+        source={{ uri: `data:image/jpeg;base64,${item?.data.image}` }}
         style={{ width: 60, height: 60, borderRadius: 99 }}
       />
       <ListItem.Content>

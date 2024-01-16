@@ -22,7 +22,7 @@ import { Colors, DialogCustomColors } from "../../config/colors";
 function Login({ navigation }) {
   const [phoneNumber, setPhoneNumber] = useState("");
   const handleSubmit = () => {
-    if (phoneNumber.length == 11) {
+    if (phoneNumber.length == 12) {
       fetch(`${process.env.EXPO_PUBLIC_SERVER_UR}api/v1/auth/login`, {
         method: "POST",
         headers: {
@@ -94,7 +94,7 @@ function Login({ navigation }) {
           <View style={styles.loginInput}>
             <Feather name="phone" size={24} color="#F33F7F" />
             <TextInput
-              maxLength={11}
+              maxLength={12}
               style={styles.loginPhone}
               value={phoneNumber}
               onChangeText={(text) => setPhoneNumber(text)}

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+// import FileSystem from "fs";
+import * as FileSystem from "expo-file-system";
 import {
   StyleSheet,
   Text,
@@ -24,6 +26,7 @@ import { updateUser } from "../../Redux/reducres";
 import { useDispatch, useSelector } from "react-redux";
 export default function LoginScreen({ navigation, route }) {
   const { number } = route.params;
+  // number = 879809807;
   const dispatch = useDispatch();
   const theme = useTheme();
   const [selectedGender, setSelectedGender] = useState(null);
@@ -43,10 +46,12 @@ export default function LoginScreen({ navigation, route }) {
     console.log(result);
 
     if (!result.canceled) {
+      console.log(result.assets[0].uri);
+
       setImage(result.assets[0].uri);
     }
   };
-  const handleNextPress = ({}) => {
+  const handleNextPress = async ({}) => {
     setLoading(true);
     if (!selectedGender || !name || !image) {
       Dialog.show({
@@ -57,6 +62,9 @@ export default function LoginScreen({ navigation, route }) {
       });
       setLoading(false);
     } else {
+      const base64 = await FileSystem.readAsStringAsync(image, {
+        encoding: "base64",
+      });
       fetch(`${process.env.EXPO_PUBLIC_SERVER_UR}api/v1/auth/register`, {
         method: "POST",
         headers: {
@@ -65,7 +73,7 @@ export default function LoginScreen({ navigation, route }) {
         body: JSON.stringify({
           number: number,
           name,
-          image,
+          image: base64,
           gender: selectedGender,
         }),
       })
@@ -80,7 +88,7 @@ export default function LoginScreen({ navigation, route }) {
               textBody: "Successfully Registered",
               button: "Move in",
             });
-            navigation.navigate("Home");
+            // navigation.navigate("Home");
           } else {
             Dialog.show({
               type: ALERT_TYPE.DANGER,
