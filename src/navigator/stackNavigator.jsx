@@ -11,6 +11,8 @@ import Setting from "../screens/SettingScreen";
 import ChatScreen from "../screens/ChatScreen";
 import CustomListItem from "../../components/CustomListItem";
 import RegisterScreen from "../screens/RegitserScreen";
+import Chat from "../screens/HomeScreen/Chat";
+import Message from "../screens/HomeScreen/Message";
 
 export default function StackNavigator() {
   const Stack = createNativeStackNavigator();
@@ -30,13 +32,24 @@ export default function StackNavigator() {
       />
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="ListItem" component={CustomListItem} />
-      <Stack.Screen name="AddContact" component={AddContact} />
       <Stack.Screen name="Search" component={Search} />
       <Stack.Screen name="Setting" component={Setting} />
+      <Stack.Screen name="AddContact" component={AddContact} />
       <Stack.Screen
         name="ChatScreen"
         component={ChatScreen}
         options={{ headerShown: true }}
+      />
+      <Stack.Screen name="Chat" component={Chat} />
+      <Stack.Screen
+        name="Camera"
+        component={Message}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Entypo name="camera" size={24} color="white" />
+          ),
+          tabBarLabel: () => null,
+        }}
       />
     </Stack.Navigator>
   );

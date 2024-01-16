@@ -8,20 +8,13 @@ import ChatScreen from "../ChatScreen";
 
 function Chat({navigation}){
     const Stack = createNativeStackNavigator();
-    return(
-        <>
-        <View >
-            <CustomListItem navigation={navigation}/>
-                <TouchableOpacity style={styles.msgBtn} onPress={()=>navigation.navigate("AddContact")}>
-                    <Entypo name="new-message" size={30} color="#ffffff" />
-                </TouchableOpacity>
-                <Stack.Navigator screenOptions={{headerStyle: {backgroundColor: '#F33F7F'}, headerTintColor: '#ffffff'}}>
-                    <Stack.Screen name="AddContact" component={AddContact}/>
-                    <Stack.Screen name="ChatScreen" component={ChatScreen} />
-                </Stack.Navigator>
+    return (
+      <>
+        <View>
+          <CustomListItem navigation={navigation} />
+          
         </View>
-        
-        </>
+      </>
     );
 };
 
