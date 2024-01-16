@@ -3,7 +3,7 @@ import { Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { ListItem, Avatar } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
-import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
 import {
   ALERT_TYPE,
@@ -13,7 +13,7 @@ import {
 } from "react-native-alert-notification";
 import { DialogCustomColors } from "../src/config/colors";
 
-function ComponentContact({ item, refetch, setRefetch }) {
+function ComponentContact({ item }) {
   const InitialData = useSelector((state) => state.data);
   const [flag, setFlag] = useState(false);
 
@@ -37,7 +37,7 @@ function ComponentContact({ item, refetch, setRefetch }) {
         if (data.success) {
           Dialog.show({
             type: ALERT_TYPE.SUCCESS,
-            title: "Success",
+            title: "INVALID",
             textBody: "Added contact",
             button: "close",
           });
@@ -51,8 +51,9 @@ function ComponentContact({ item, refetch, setRefetch }) {
           textBody: error.message,
           button: "close",
         });
-        setRefetch(!refetch);
+        
       });
+      setRefetch(!refetch);
   };
   useEffect(() => {
     if (InitialData?.contacts) {
@@ -67,7 +68,7 @@ function ComponentContact({ item, refetch, setRefetch }) {
   return (
     <ListItem bottomDivider>
       <Image
-        source={{ uri: `data:image/jpeg;base64,${item?.image}` }}
+        source={{ uri: item?.image }}
         style={{ width: 60, height: 60, borderRadius: 99 }}
       />
       <ListItem.Content>
@@ -76,8 +77,8 @@ function ComponentContact({ item, refetch, setRefetch }) {
       </ListItem.Content>
       {flag ? (
         <TouchableOpacity style={styles.btn}>
-          <Ionicons name="checkbox" size={30} color="#ffffff" />
-          <Text style={styles.btnTxt}>Edit</Text>
+          <FontAwesome name="check" size={24} color="#ffffff" />
+          <Text style={styles.btnTxt}>Added</Text>
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
@@ -96,6 +97,7 @@ export default ComponentContact;
 const styles = StyleSheet.create({
   listTitle: {
     fontWeight: 900,
+    paddingVertical: 10
   },
   btn: {
     flexDirection: 'row',
@@ -105,6 +107,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 50,
+    position: 'absolute',
+    right: '6%'
   },
   btnTxt: {
     color: "#ffffff",
