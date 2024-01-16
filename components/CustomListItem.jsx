@@ -72,9 +72,9 @@ function CustomListItem() {
 
   const navigateToChatScreen = (item) => {
     navigation.navigate("ChatScreen", {
-      name: item.data.name,
-      image: item.data.image,
-      id: item.data._id,
+      name: item?.data?.name,
+      image: item?.data?.image,
+      id: item?.data?._id,
     });
   };
 

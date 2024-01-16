@@ -18,7 +18,7 @@ export default function StackNavigator() {
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName="AddContact"
+      initialRouteName="ChatScreen"
     >
       <Stack.Screen name="Splash" component={SplashScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />

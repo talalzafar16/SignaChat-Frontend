@@ -154,7 +154,7 @@ function ChatScreen({ navigation, route }) {
             />
           </View>
           <TouchableOpacity onPress={() => sendMessage()} style={styles.record}>
-            <MaterialIcons name="keyboard-voice" size={24} color="white" />
+            <Ionicons name="send" size={24} color="#ffffff" />
           </TouchableOpacity>
         </ImageBackground>
       </View>
