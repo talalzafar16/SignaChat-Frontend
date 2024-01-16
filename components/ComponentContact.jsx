@@ -3,6 +3,7 @@ import { Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { ListItem, Avatar } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
+import { Ionicons } from '@expo/vector-icons';
 
 import {
   ALERT_TYPE,
@@ -75,7 +76,8 @@ function ComponentContact({ item, refetch, setRefetch }) {
       </ListItem.Content>
       {flag ? (
         <TouchableOpacity style={styles.btn}>
-          <Text style={styles.btnTxt}>Ckeck Icon</Text>
+          <Ionicons name="checkbox" size={30} color="#ffffff" />
+          <Text style={styles.btnTxt}>Edit</Text>
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
@@ -96,6 +98,7 @@ const styles = StyleSheet.create({
     fontWeight: 900,
   },
   btn: {
+    flexDirection: 'row',
     height: 50,
     width: 120,
     backgroundColor: "#F33F7F",
@@ -107,5 +110,6 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     fontSize: 15,
     fontWeight: "bold",
+    paddingLeft: '5%'
   },
 });

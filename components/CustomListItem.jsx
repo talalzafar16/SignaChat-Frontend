@@ -59,7 +59,7 @@ function CustomListItem() {
           <ListItem.Subtitle numberOfLines={1} ellipsizeMode="tail">
             {item.content}
           </ListItem.Subtitle>
-          <ListItem.Subtitle numberOfLines={1} ellipsizeMode="tail">
+          <ListItem.Subtitle numberOfLines={1} ellipsizeMode="tail" style={styles.date}>
             {new Date(item.createdAt).getUTCHours()}:
             {new Date(item.createdAt).getUTCMinutes()}
           </ListItem.Subtitle>
@@ -106,4 +106,9 @@ export default CustomListItem;
 
 const styles = StyleSheet.create({
   container: {},
+
+  date: {
+    position: 'absolute',
+    left: '80%'
+  }
 });
