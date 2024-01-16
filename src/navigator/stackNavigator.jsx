@@ -11,13 +11,14 @@ import Setting from "../screens/SettingScreen";
 import ChatScreen from "../screens/ChatScreen";
 import CustomListItem from "../../components/CustomListItem";
 import RegisterScreen from "../screens/RegitserScreen";
+import Profile from "../screens/ProfileScreen";
 
 export default function StackNavigator() {
   const Stack = createNativeStackNavigator();
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName="Login"
+      initialRouteName="AddContact"
     >
       <Stack.Screen name="Splash" component={SplashScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
@@ -37,6 +38,11 @@ export default function StackNavigator() {
         name="ChatScreen"
         component={ChatScreen}
         options={{ headerShown: true }}
+      />
+      <Stack.Screen 
+      name="Profile" 
+      component={Profile}
+      options={{headerShown: true}}
       />
     </Stack.Navigator>
   );
