@@ -57,7 +57,7 @@ export default function LoginScreen({ navigation, route }) {
       });
       setLoading(false);
     } else {
-      fetch(`http://192.168.43.7:8000/api/v1/auth/register`, {
+      fetch(`${process.env.EXPO_PUBLIC_SERVER_UR}api/v1/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -75,7 +75,7 @@ export default function LoginScreen({ navigation, route }) {
             dispatch(updateUser(data.user));
 
             Dialog.show({
-              type: ALERT_TYPE.success,
+              type: ALERT_TYPE.SUCCESS,
               title: "Welocome",
               textBody: "Successfully Registered",
               button: "Move in",

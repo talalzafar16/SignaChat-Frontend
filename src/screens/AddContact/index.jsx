@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Text,
   View,
@@ -9,77 +9,81 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { Button, Input } from "react-native-elements";
-import CustomListItem from "../../../components/CustomListItem";
-import Ali from "../../../assets/avatars/ali.png";
-import Khabib from "../../../assets/avatars/Khabib.png";
-import Khamzat from "../../../assets/avatars/khamzat.png";
-import { Colors } from "../../config/colors";
+import ComponentContact from "../../../components/ComponentContact";
 
-function AddContact({ navigation, route }) {
-  const Stack = createNativeStackNavigator();
-  const [newContact, setNewContact] = useState("");
+function AddContact() {
+  const [searchContact, setSearchContact] = useState();
   const [showField, setShowField] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [filteredList, setFilteredList] = useState(chatData);
-  const chatData = [
-    { id: "1", name: "Bajwa", avatar: Ali },
-    { id: "2", name: "Khabib", avatar: Khabib },
-    { id: "3", name: "Khamzat", avatar: Khamzat },
-    // Add more chat items as needed
-  ];
+  const [chatData, setChatData] = useState([]);
 
   const handle = () => {
     setShowField(!showField);
   };
 
-  const renderChatItem = ({ item }) => <CustomListItem data={item} />;
+  const fetchAPIData = async () => {
+    try {
+      fetch(`${process.env.EXPO_PUBLIC_SERVER_UR}api/v1/user/get-all-users`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ value: searchContact }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setChatData(data.user);
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  useEffect(() => {
+    fetchAPIData();
+  }, []);
+  useEffect(() => {
+    fetchAPIData();
+  }, [searchContact]);
   const handleNameInput = (text) => {
-    setNewContact(text);
-
-    const filteredData =
-      typeof text === "string"
-        ? chatData.filter((item) =>
-            item.name.toLowerCase().startsWith(text.toLowerCase())
-          )
-        : chatData;
-
-    setFilteredList(filteredData);
+    setSearchContact(text);
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <Text
-        style={{
-          textAlign: "center",
-          fontWeight: "bold",
-          color: Colors.primary,
-          fontSize: 30,
-        }}
-      >
-        Search New People
-      </Text>
-      <Text
-        style={{
-          textAlign: "center",
-          fontWeight: "bold",
-          color: "black",
-          marginTop: 6,
-          fontSize: 26,
-        }}
-      >
-        Make New Friends
-      </Text>
-      <>
+    <View style={styles.container} behavior="padding">
+      <ScrollView>
+        <Text
+          style={{
+            textAlign: "center",
+            fontWeight: "bold",
+            color: "#F33F7F",
+            fontSize: 30,
+            paddingTop: 40,
+          }}
+        >
+          Search New People
+        </Text>
+        <Text
+          style={{
+            textAlign: "center",
+            fontWeight: "bold",
+            color: "black",
+            marginTop: 6,
+            fontSize: 26,
+          }}
+        >
+          Make New Friends
+        </Text>
         <TouchableOpacity style={styles.btn} onPress={handle}>
           <View style={styles.btnIcon}>
             <Ionicons name="person-add" size={30} color="#ffffff" />
           </View>
           <View style={styles.btnTextContainer}>
-            <Text style={styles.btnText}>New Contact</Text>
+            <Text style={styles.btnText}>Search Contact</Text>
           </View>
         </TouchableOpacity>
 
@@ -89,32 +93,27 @@ function AddContact({ navigation, route }) {
               <Text style={styles.inputsTxt}>Phone Number:</Text>
               <TextInput
                 style={styles.Input}
-                value={newContact}
+                value={searchContact}
                 onChangeText={handleNameInput}
                 placeholder="xxx-xxxxxxx"
-                keyboardType="number"
+                keyboardType="phone-pad"
                 keyboardAppearance="dark"
                 maxLength={11}
-                onSubmitEditing={() => {}}
               />
             </View>
           </View>
         )}
 
         <View style={styles.display}>
-          <Text style={styles.displayTxt}> Contacts on SignaChat </Text>
+          <Text style={styles.displayTxt}> People on SignaChat </Text>
         </View>
-      </>
-      <FlatList
-        data={newContact ? filteredList : chatData}
-        keyExtractor={(item) => item.id}
-        renderItem={renderChatItem}
-        onEndReached={() => {}}
-        // ListHeaderComponent={() => (
-
-        // )}
-      />
-    </KeyboardAvoidingView>
+        <FlatList
+          data={chatData}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => <ComponentContact item={item} />}
+        />
+      </ScrollView>
+    </View>
   );
 }
 export default AddContact;
@@ -122,7 +121,6 @@ export default AddContact;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60,
     backgroundColor: "#fff",
   },
   btn: {
@@ -185,6 +183,3 @@ const styles = StyleSheet.create({
     color: "#ffffff",
   },
 });
-
-/*onPress={createChat} <Input value={newContact} onChange={setNewContact} placeholder='Enter a chat name' leftIcon={<Entypo name="chat" size={24} color="black" />}/><Button  title={'Creates'}/>
-<TextInput value={newContact} onChange={(text)=> setNewContact(text)} placeholder='Enter Phone Number' keyboardType='phone-pad' /> */

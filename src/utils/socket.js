@@ -1,3 +1,3 @@
 import { io } from "socket.io-client";
-const socket = io.connect("http://192.168.43.7:8000");
+const socket = io.connect(process.env.EXPO_PUBLIC_SERVER_UR);
 export default socket;

@@ -23,7 +23,7 @@ function Login({ navigation }) {
   const [phoneNumber, setPhoneNumber] = useState("");
   const handleSubmit = () => {
     if (phoneNumber.length == 11) {
-      fetch(`http://192.168.43.7:8000/api/v1/auth/login`, {
+      fetch(`${process.env.EXPO_PUBLIC_SERVER_UR}api/v1/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

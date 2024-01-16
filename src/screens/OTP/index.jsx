@@ -38,7 +38,7 @@ function OTP({ route, navigation }) {
   }, [seconds]);
 
   const handleVerifyPress = () => {
-    fetch(`http://192.168.43.7:8000/api/v1/auth/verify-otp`, {
+    fetch(`${process.env.EXPO_PUBLIC_SERVER_UR}api/v1/auth/verify-otp`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -55,7 +55,6 @@ function OTP({ route, navigation }) {
           if (!existingUser) {
             navigation.navigate("TermAndCondition", { number: number });
           } else {
-            console.log("hehh");
             dispatch(updateUser(data.user));
             navigation.navigate("Home");
           }

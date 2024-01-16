@@ -5,17 +5,19 @@ import { ListItem } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
 import { Image } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Colors } from "../src/config/colors";
+import { updateUser } from "../src/Redux/reducres";
 
 function CustomListItem() {
   const [chatData, setChatData] = useState([]);
   const InitialData = useSelector((state) => state.data);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     fetch(
-      `http://192.168.43.7:8000/api/v1/user/get-user-contacts/${InitialData._id}`,
+      `${process.env.EXPO_PUBLIC_SERVER_UR}api/v1/user/get-user-contacts/${InitialData._id}`,
       {
         method: "GET",
         headers: {
@@ -27,6 +29,7 @@ function CustomListItem() {
       .then((data) => {
         if (data.success) {
           setChatData(data.user);
+          dispatch(updateUser({ contacts: data.user }));
         }
       });
   }, [navigation]);

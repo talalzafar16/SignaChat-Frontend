@@ -27,7 +27,7 @@ function ChatScreen({ navigation, route }) {
 
   const [message, setMessage] = useState("");
   const fetchMessages = () => {
-    fetch(`http://192.168.43.7:8000/api/v1/user/recieve-message`, {
+    fetch(`${process.env.EXPO_PUBLIC_SERVER_UR}api/v1/user/recieve-message`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -41,7 +41,6 @@ function ChatScreen({ navigation, route }) {
       .then((data) => {
         if (data.success) {
           setChatMessages(data.user);
-          console.log("hello", data.user);
         }
       });
   };
@@ -53,7 +52,7 @@ function ChatScreen({ navigation, route }) {
   }, []);
 
   const sendMessage = () => {
-    fetch(`http://192.168.43.7:8000/api/v1/user/send-message`, {
+    fetch(`${process.env.EXPO_PUBLIC_SERVER_UR}api/v1/user/send-message`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -67,7 +66,6 @@ function ChatScreen({ navigation, route }) {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          console.log("hello success");
         }
       });
     socket.emit("new message", {
@@ -121,7 +119,6 @@ function ChatScreen({ navigation, route }) {
       ),
     });
   }, [navigation]);
-  console.log("messag", message);
   return (
     <KeyboardAvoidingView style={styles.container}>
       <View style={styles.scrollViewContent} keyboardDismissMode="on-drag">

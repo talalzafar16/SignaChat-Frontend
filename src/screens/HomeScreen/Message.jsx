@@ -29,7 +29,7 @@ function Message({ navigation }) {
   const loadModel = async () => {
     console.log("loading model ");
     const model = await tf.loadGraphModel(MODEL_URL);
-    console.log("connected");
+    g("connected");
 
     return model;
   };
