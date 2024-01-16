@@ -88,7 +88,7 @@ export default function LoginScreen({ navigation, route }) {
               textBody: "Successfully Registered",
               button: "Move in",
             });
-            // navigation.navigate("Home");
+            navigation.navigate("Home");
           } else {
             Dialog.show({
               type: ALERT_TYPE.DANGER,

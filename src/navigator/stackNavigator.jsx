@@ -18,7 +18,7 @@ export default function StackNavigator() {
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName="AddContact"
+      initialRouteName="Profile"
     >
       <Stack.Screen name="Splash" component={SplashScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
@@ -39,10 +39,10 @@ export default function StackNavigator() {
         component={ChatScreen}
         options={{ headerShown: true }}
       />
-      <Stack.Screen 
-      name="Profile" 
-      component={Profile}
-      options={{headerShown: true}}
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+        options={{ headerShown: true }}
       />
     </Stack.Navigator>
   );
