@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import TermAndCondition from "../screens/TermAndCondition";
 import OTP from "../screens/OTP";
 import HomeScreen from "../screens/HomeScreen";
+import Profile from "../screens/ProfileScreen";
 import AddContact from "../screens/AddContact";
 import Search from "../screens/SearchScreen";
 import Setting from "../screens/SettingScreen";
@@ -13,13 +14,15 @@ import CustomListItem from "../../components/CustomListItem";
 import RegisterScreen from "../screens/RegitserScreen";
 import Chat from "../screens/HomeScreen/Chat";
 import Message from "../screens/HomeScreen/Message";
-
+import { useSelector } from "react-redux";
 export default function StackNavigator() {
   const Stack = createNativeStackNavigator();
+  const InitialData = useSelector((state) => state.data);
+  console.log(InitialData);
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName="Login"
+      initialRouteName={InitialData.name ? "Home" : "Login"}
     >
       <Stack.Screen name="Splash" component={SplashScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
@@ -35,6 +38,11 @@ export default function StackNavigator() {
       <Stack.Screen name="Search" component={Search} />
       <Stack.Screen name="Setting" component={Setting} />
       <Stack.Screen name="AddContact" component={AddContact} />
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+        options={{ headerShown: true }}
+      />
       <Stack.Screen
         name="ChatScreen"
         component={ChatScreen}

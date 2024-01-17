@@ -7,15 +7,26 @@ import {
   Animated,
   StyleSheet,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { Colors } from "../../config/colors";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { Colors, DialogCustomColors } from "../../config/colors";
+
+import {
+  ALERT_TYPE,
+  Dialog,
+  AlertNotificationRoot,
+  Toast,
+} from "react-native-alert-notification";
+import { persistor } from "../../Redux/store";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../../Redux/reducres";
 const AnimatedModal = ({ isVisible, onClose, navigation }) => {
   const [animatedHeight] = useState(new Animated.Value(0));
-
+  const dispatch = useDispatch();
   const openModal = () => {
     Animated.timing(animatedHeight, {
-      toValue: 200, // Adjust the desired height of the modal
-      duration: 300, // Adjust the duration of the animation
+      toValue: 200,
+      duration: 300,
       useNativeDriver: false,
     }).start();
   };
@@ -26,6 +37,28 @@ const AnimatedModal = ({ isVisible, onClose, navigation }) => {
       duration: 300,
       useNativeDriver: false,
     }).start(() => onClose());
+  };
+  const Logout = async () => {
+    try {
+      dispatch(logoutUser());
+      // await AsyncStorage.clear();
+      // await AsyncStorage.removeItem("persist:root");
+      // await persistor.purge();
+      console.log("AsyncStorage cleared successfully!");
+
+      Dialog.show({
+        type: ALERT_TYPE.SUCCESS,
+        title: "Successfull Logged out",
+        textBody: "See You Soonn!",
+        button: "close",
+        onPressButton: () => {
+          console.log("Close button pressed!");
+          navigation.navigate("Login");
+        },
+      });
+    } catch (error) {
+      console.error("Error clearing AsyncStorage:", error);
+    }
   };
 
   return (
@@ -41,6 +74,49 @@ const AnimatedModal = ({ isVisible, onClose, navigation }) => {
         onPress={closeModal}
       >
         <Animated.View
+          style={[
+            styles.modalContainer,
+            { backgroundColor: "white", padding: 40, height: animatedHeight },
+          ]}
+        >
+          {/* Content of your modal goes here */}
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Profile")}
+            style={{
+              position: "absolute",
+              width: "100%",
+            }}
+          >
+            <Text
+              style={{
+                color: Colors.primary,
+                backgroundColor: "white",
+                textAlign: "center",
+                width: "100%",
+                paddingTop: 14,
+                fontWeight: "500",
+                fontSize: 19,
+              }}
+            >
+              Looking For More Features
+              {/* <br /> */}
+            </Text>
+            <Text
+              style={{
+                color: Colors.primary,
+                backgroundColor: "white",
+                textAlign: "center",
+                width: "100%",
+                paddingTop: 6,
+                fontWeight: "500",
+                fontSize: 19,
+              }}
+            >
+              Here you goo!
+            </Text>
+          </TouchableOpacity>
+        </Animated.View>
+        <Animated.View
           style={[styles.modalContainer, { height: animatedHeight }]}
         >
           {/* Content of your modal goes here */}
@@ -55,7 +131,7 @@ const AnimatedModal = ({ isVisible, onClose, navigation }) => {
               style={{
                 color: "white",
                 textAlign: "center",
-                paddingTop: 10,
+                paddingTop: 14,
                 fontWeight: "500",
                 fontSize: 19,
               }}
@@ -75,18 +151,26 @@ const AnimatedModal = ({ isVisible, onClose, navigation }) => {
                 textAlign: "center",
                 fontWeight: "500",
                 fontSize: 19,
-                paddingTop: 3,
+                paddingTop: 7,
               }}
             >
-              Setting
+              Sign language Dictionary
             </Text>
           </TouchableOpacity>
         </Animated.View>
         <Animated.View
-          style={[styles.modalContainer, { height: animatedHeight }]}
+          style={[
+            styles.modalContainer,
+            {
+              backgroundColor: "red",
+
+              height: animatedHeight,
+            },
+          ]}
         >
           {/* Content of your modal goes here */}
           <TouchableOpacity
+            onPress={Logout}
             style={{
               position: "absolute",
               width: "100%",
@@ -95,14 +179,17 @@ const AnimatedModal = ({ isVisible, onClose, navigation }) => {
             <Text
               style={{
                 color: "white",
+                backgroundColor: "red",
                 textAlign: "center",
                 fontWeight: "500",
+                paddingTop: 7,
                 fontSize: 19,
               }}
             >
               Logout
             </Text>
           </TouchableOpacity>
+          <AlertNotificationRoot colors={[DialogCustomColors]} />
         </Animated.View>
       </TouchableOpacity>
     </Modal>
@@ -120,6 +207,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
     width: "80%",
     padding: 23,
+    display: "flex",
+    // justifyContent: "center",
+    alignItems: "center",
   },
 });
 

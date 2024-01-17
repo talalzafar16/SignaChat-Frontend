@@ -11,12 +11,21 @@ import {
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 
-function Profile() {
+function Profile({ route }) {
   const IntialData = useSelector((state) => state.data);
-  const [Name, setName] = useState(IntialData.name);
-  const [Phone, setPhone] = useState(IntialData.number);
-  const [Gender, setGender] = useState(IntialData.gender);
-  const [Photo, setPhoto] = useState(IntialData.image);
+  console.log(route.params?.gender, route.params?.number);
+  const [Name, setName] = useState(
+    route.params?.name ? route.params?.name : IntialData.name
+  );
+  const [Phone, setPhone] = useState(
+    route.params?.number ? route.params?.number : IntialData.number
+  );
+  const [Gender, setGender] = useState(
+    route.params?.gender ? route.params?.gender : IntialData.gender
+  );
+  const [Photo, setPhoto] = useState(
+    route.params?.image ? route.params?.image : IntialData.image
+  );
   return (
     <ImageBackground
       style={{
@@ -30,7 +39,6 @@ function Profile() {
       <TouchableOpacity>
         <Image
           source={{ uri: `data:image/jpeg;base64,${Photo}` }}
-          //   style={styles.image}
           style={{ width: 130, height: 130, borderRadius: 99 }}
           resizeMode="contain"
         />

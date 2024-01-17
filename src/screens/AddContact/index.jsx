@@ -12,8 +12,9 @@ import {
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { Button, Input } from "react-native-elements";
 import ComponentContact from "../../../components/ComponentContact";
+import { useFocusEffect } from "@react-navigation/native";
 
-function AddContact() {
+function AddContact({ navigation }) {
   const [searchContact, setSearchContact] = useState();
   const [showField, setShowField] = useState(false);
   const [refetch, setRefetch] = useState(false);
@@ -43,13 +44,17 @@ function AddContact() {
       console.log(error);
     }
   };
+  useEffect(() => {
+    console.log("running useeffect");
+    fetchAPIData();
+  }, []);
+  const fetcher = React.useCallback(() => {
+    fetchAPIData();
+  }, [navigation]);
 
   useEffect(() => {
     fetchAPIData();
-  }, []);
-  useEffect(() => {
-    fetchAPIData();
-  }, [searchContact, refetch]);
+  }, [searchContact, refetch, navigation]);
   const handleNameInput = (text) => {
     setSearchContact(text);
   };

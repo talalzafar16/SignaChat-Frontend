@@ -9,6 +9,8 @@ import {
   KeyboardAvoidingView,
   ScrollView,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+
 import { Avatar } from "react-native-elements";
 import backgroundImage from "../../../assets/TermsAndCondition/background.png";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
@@ -22,6 +24,8 @@ function ChatScreen({ navigation, route }) {
   const InitialData = useSelector((state) => state.data);
   const name = route.params.name;
   const image = route.params.image;
+  const number = route.params.number;
+  const gender = route.params.gender;
   const recieverId = route.params.id;
   const [chatMessages, setChatMessages] = useState([]);
 
@@ -82,7 +86,6 @@ function ChatScreen({ navigation, route }) {
           newMessageRecieved?.createdAt != chatMessages[-1]?.createdAt &&
           newMessageRecieved?.content != chatMessages[-1]?.content
         ) {
-          console.log(chatMessages[1]?.content);
           setChatMessages([...chatMessages, newMessageRecieved]);
           setMessage("");
         }
@@ -95,9 +98,19 @@ function ChatScreen({ navigation, route }) {
       headerStyle: { backgroundColor: "#F33F7F" },
       headerTitleAlign: "left",
       headerTitle: () => (
-        <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("Profile", {
+              name,
+              image,
+              number,
+              gender,
+            })
+          }
+          style={styles.header}
+        >
           <Image
-            source={{ uri: image }}
+            source={{ uri: `data:image/jpeg;base64,${image}` }}
             style={{ width: 40, height: 40, borderRadius: 99 }}
           />
           <Text style={styles.headerTxt}>{name}</Text>
@@ -115,7 +128,7 @@ function ChatScreen({ navigation, route }) {
               color="white"
             />
           </TouchableOpacity> */}
-        </View>
+        </TouchableOpacity>
       ),
     });
   }, [navigation]);
@@ -143,7 +156,13 @@ function ChatScreen({ navigation, route }) {
 
           <View style={styles.inputMsg}>
             <TouchableOpacity>
-              <Entypo name="emoji-happy" size={24} color="black" />
+              {/* <Entypo name="emoji-happy" size={24} color="black" /> */}
+              <Entypo
+                onPress={() => navigation.navigate("Camera")}
+                name="camera"
+                size={24}
+                color="black"
+              />
             </TouchableOpacity>
             <TextInput
               style={styles.msg}
@@ -154,7 +173,7 @@ function ChatScreen({ navigation, route }) {
             />
           </View>
           <TouchableOpacity onPress={() => sendMessage()} style={styles.record}>
-            <MaterialIcons name="keyboard-voice" size={24} color="white" />
+            <Ionicons name="send" size={24} color="#ffffff" />
           </TouchableOpacity>
         </ImageBackground>
       </View>

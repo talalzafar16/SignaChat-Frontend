@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,14 +9,11 @@ import {
   Pressable,
 } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { Screen } from "react-native-screens";
+
 import Chat from "./Chat";
-import Message from "./Message";
-import { FontAwesome5 } from "@expo/vector-icons";
+
 import { Entypo } from "@expo/vector-icons";
-import { color } from "react-native-elements/dist/helpers";
-import AddContact from "../AddContact";
+
 import AnimatedModal from "../../components/Modal/Modal";
 
 function HomeScreen({ navigation }) {
@@ -47,13 +44,8 @@ function HomeScreen({ navigation }) {
           />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={toggleModal}>
-          <Entypo
-            style={styles.menuBtn}
-            name="dots-three-vertical"
-            size={24}
-            color="white"
-          />
+        <TouchableOpacity style={{ top: 30, left: 80 }} onPress={toggleModal}>
+          <Entypo name="dots-three-vertical" size={24} color="white" />
         </TouchableOpacity>
         <AnimatedModal
           navigation={navigation}
@@ -90,7 +82,7 @@ function HomeScreen({ navigation }) {
           alignItems: "center",
           justifyContent: "center",
         }}
-        onPress={() => navigation.navigate("AddContact")}
+        onPress={() => navigation.push("AddContact")}
       >
         <Entypo name="new-message" size={30} color="white" />
       </TouchableOpacity>

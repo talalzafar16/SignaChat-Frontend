@@ -8,7 +8,14 @@ const persistConfig = {
   key: "root",
   storage: AsyncStorage,
 };
+// const rootReducer = (state, action) => {
+//   if (action.type === "USER_LOGOUT") {
+//     AsyncStorage.removeItem("persist:root");
+//     return userSlice.reducer(undefined, action);
+//   }
 
+//   return userSlice.reducer(state, action);
+// };
 const persistedReducer = persistReducer(persistConfig, userSlice.reducer);
 export const store = configureStore({
   reducer: persistedReducer,

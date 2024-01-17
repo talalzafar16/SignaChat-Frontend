@@ -57,14 +57,6 @@ function Message({ navigation }) {
       setHasPermission(status === "granted");
     })();
   }, []);
-  useFocusEffect(
-    React.useCallback(() => {
-      // Handle any setup you need when the screen is focused
-      return () => {
-        // Clean up any resources when the screen is unfocused
-      };
-    }, [])
-  );
 
   const takePicture = async () => {
     if (cameraRef) {

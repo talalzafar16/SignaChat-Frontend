@@ -20,9 +20,19 @@ export const userSlice = createSlice({
         ...action.payload,
       };
     },
+
+    logoutUser: (state, action) => {
+      state.data = {
+        name: null,
+        image: null,
+        phoneNumber: null,
+        accessToken: null,
+        contacts: null,
+      };
+    },
   },
 });
 
-export const { updateUser } = userSlice.actions;
+export const { updateUser, logoutUser } = userSlice.actions;
 
 export default userSlice;

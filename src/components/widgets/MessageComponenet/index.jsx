@@ -28,7 +28,14 @@ export default function MessageComponent({ item, user }) {
             style={
               status
                 ? styles.mmessage
-                : [styles.mmessage, { backgroundColor: Colors.primary }]
+                : [
+                    styles.mmessage,
+                    {
+                      backgroundColor: Colors.primary,
+                      borderBottomLeftRadius: 30,
+                      borderBottomRightRadius: 0,
+                    },
+                  ]
             }
           >
             <Text style={{ color: "white" }}>{item.content}</Text>
@@ -60,8 +67,13 @@ const styles = StyleSheet.create({
     maxWidth: "76%",
     backgroundColor: "#008080",
     padding: 15,
-    borderRadius: 10,
+    // borderRadius: 10,
     marginBottom: 2,
+    borderBottomRightRadius: 30,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    borderBottomLeftRadius: 0,
+    // borderBottomRightRadius: 50,
   },
   mvatar: {
     marginRight: 5,

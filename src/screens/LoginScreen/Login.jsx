@@ -8,6 +8,7 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from "react-native";
 import {
   ALERT_TYPE,
@@ -18,9 +19,11 @@ import {
 
 import { Feather, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Colors, DialogCustomColors } from "../../config/colors";
+import { useSelector } from "react-redux";
 
 function Login({ navigation }) {
   const [phoneNumber, setPhoneNumber] = useState("");
+
   const handleSubmit = () => {
     if (phoneNumber.length == 12) {
       fetch(`${process.env.EXPO_PUBLIC_SERVER_UR}api/v1/auth/login`, {
@@ -89,27 +92,29 @@ function Login({ navigation }) {
           source={require("../../../assets/logo/Login.png")}
           resizeMode="contain"
         />
-        <View style={styles.login}>
-          <Text style={styles.text2}>Enter phone number to continue..</Text>
-          <View style={styles.loginInput}>
-            <Feather name="phone" size={24} color="#F33F7F" />
-            <TextInput
-              maxLength={12}
-              style={styles.loginPhone}
-              value={phoneNumber}
-              onChangeText={(text) => setPhoneNumber(text)}
-              keyboardType="phone-pad"
-              placeholder="xxxxxxxxxxx"
-            />
+        <KeyboardAvoidingView>
+          <View style={styles.login}>
+            <Text style={styles.text2}>Enter phone number to continue..</Text>
+            <View style={styles.loginInput}>
+              <Feather name="phone" size={24} color="#F33F7F" />
+              <TextInput
+                maxLength={12}
+                style={styles.loginPhone}
+                value={phoneNumber}
+                onChangeText={(text) => setPhoneNumber(text)}
+                keyboardType="phone-pad"
+                placeholder="xxxxxxxxxxx"
+              />
+            </View>
+            <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
+              <Text style={styles.txt}>
+                Next{" "}
+                <MaterialIcons name="navigate-next" size={20} color="#F33F7F" />
+              </Text>
+            </TouchableOpacity>
+            <AlertNotificationRoot colors={[DialogCustomColors]} />
           </View>
-          <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-            <Text style={styles.txt}>
-              Next{" "}
-              <MaterialIcons name="navigate-next" size={20} color="#F33F7F" />
-            </Text>
-          </TouchableOpacity>
-          <AlertNotificationRoot colors={[DialogCustomColors]} />
-        </View>
+        </KeyboardAvoidingView>
       </ImageBackground>
     </ScrollView>
   );
