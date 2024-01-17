@@ -7,14 +7,13 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { Entypo } from "@expo/vector-icons";
+// import { Video } from "expo";
 import { Camera, CameraType } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useFocusEffect } from "@react-navigation/native";
 import * as tf from "@tensorflow/tfjs";
-import { ContactSupportOutlined } from "@mui/icons-material";
+import { Video, ResizeMode } from "expo-av";
 
 const MODEL_URL =
   "https://tensorflowjsrealtimemodel.s3.au-syd.cloud-object-storage.appdomain.cloud/model.json";
@@ -22,9 +21,12 @@ const MODEL_URL =
 function Message({ navigation }) {
   const [image, setImage] = useState(null);
   const cameraRef = useRef(null);
+  const [isRecording, setIsRecording] = useState(false);
+  const [videoUri, setVideoUri] = useState(null);
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
   const [type, setType] = useState(CameraType.back);
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
+  const [hasMicPermission, setHasMicPermission] = useState(null);
 
   const loadModel = async () => {
     console.log("loading model ");
@@ -40,31 +42,55 @@ function Message({ navigation }) {
     console.log("prediction: ", prediction);
   };
 
-  if (hasCameraPermission == false) {
-    return <Text>No access To camer</Text>;
-  }
+  // if (hasCameraPermission == undefined || hasMicPermission == undefined) {
+  //   return <Text>No access To camer</Text>;
+  // }
   function toggleCameraType() {
     setType((current) =>
       current === CameraType.back ? CameraType.front : CameraType.back
     );
   }
-
+  const startRecording = async () => {
+    if (cameraRef) {
+      try {
+        setIsRecording(true);
+        const videoRecordPromise = cameraRef.current
+          .recordAsync()
+          .then((data) => {
+            setVideoUri(data.uri);
+            setIsRecording(false);
+          });
+        // const data = await videoRecordPromise;
+        // console.log("Video recording complete:", data);
+      } catch (error) {
+        console.error("Error recording video:", error);
+      }
+    }
+  };
+  const stopRecording = () => {
+    if (cameraRef) {
+      cameraRef.current.stopRecording();
+      setIsRecording(false);
+    }
+  };
   useEffect(() => {
     (async () => {
       MediaLibrary.requestPermissionsAsync();
 
-      const { status } = await Camera.requestPermissionsAsync();
-      setHasPermission(status === "granted");
+      const camerPerm = await Camera.getCameraPermissionsAsync();
+      const micPerm = await Camera.getMicrophonePermissionsAsync();
+      setHasCameraPermission(camerPerm.status === "granted");
+      setHasMicPermission(camerPerm.status === "granted");
     })();
   }, []);
 
   const takePicture = async () => {
     if (cameraRef) {
       try {
-        const data = await cameraRef.current.takePictureAsync();
+        const data = await cameraRef.recordAsync();
         console.log(data);
-        setImage(data.uri);
-        makePrediction(data);
+        // setImage(data.uri);
+        // makePrediction(data);
       } catch (e) {
         console.log(e);
       }
@@ -85,14 +111,13 @@ function Message({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {!image ? (
+      {!videoUri ? (
         <Camera
           style={styles.camera}
           type={type}
           FlashMode={flash}
           ref={cameraRef}
         >
-          <Text>Hellos</Text>
           <View style={styles.changeCameraBtn}>
             <Ionicons
               name="camera-reverse"
@@ -124,21 +149,31 @@ function Message({ navigation }) {
           </View>
         </Camera>
       ) : (
-        <Image source={{ uri: image }} style={styles.camera} />
+        <Video
+          source={{ uri: videoUri }}
+          style={styles.camera}
+          looping
+          resizeMode={ResizeMode.CONTAIN}
+          useNativeControls
+        />
       )}
       <View>
-        {image ? (
+        {videoUri ? (
           <View style={styles.imageBtn}>
             <MaterialCommunityIcons
               name="camera-retake"
               size={30}
               color="white"
-              onPress={() => setImage(null)}
+              onPress={() => setVideoUri(null)}
             />
-            <MaterialCommunityIcons name="save-alt" size={30} color="white" />
+            <Ionicons name="send" size={24} color="white" />
           </View>
+        ) : isRecording ? (
+          <TouchableOpacity onPress={stopRecording} style={styles.cameraBtn}>
+            <Ionicons name="radio-button-on" size={80} color="red" />
+          </TouchableOpacity>
         ) : (
-          <TouchableOpacity onPress={takePicture} style={styles.cameraBtn}>
+          <TouchableOpacity onPress={startRecording} style={styles.cameraBtn}>
             <Ionicons name="radio-button-on" size={80} color="white" />
           </TouchableOpacity>
         )}
@@ -153,6 +188,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
+    backgroundColor: "black",
   },
   camera: {
     flex: 1,
@@ -168,6 +204,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 50,
+    paddingVertical: 26,
   },
   changeCameraBtn: {
     position: "absolute",
@@ -182,118 +219,3 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
 });
-
-// /* backgroundColor: '#000000',
-//   alignItems: 'center',
-//   paddingBottom: '10%'
-//   */
-
-// App.js
-// import React, { useRef, useEffect } from "react";
-// import { StyleSheet, Text, View, Dimensions } from "react-native";
-// import { Camera } from "expo-camera";
-// import * as tf from "@tensorflow/tfjs";
-// import "@tensorflow/tfjs-react-native";
-// import * as Expo from "expo";
-// import * as ImageManipulator from "expo-image-manipulator";
-// import { Image } from "react-native";
-
-// // import { drawRect } from "./utilities";
-
-// const { width, height } = Dimensions.get("window");
-
-// const App = () => {
-//   const cameraRef = useRef(null);
-
-//   useEffect(() => {
-//     runObjectDetection();
-//   }, []);
-
-//   const runObjectDetection = async () => {
-//     await tf.ready();
-//     const model = await tf.loadGraphModel(
-//       "https://tensorflowjsrealtimemodel.s3.au-syd.cloud-object-storage.appdomain.cloud/model.json"
-//     );
-//     console.log("loaded");
-//     const loop = async () => {
-//       if (cameraRef.current) {
-//         const photo = await cameraRef.current.takePictureAsync({
-//           quality: 0.5,
-//         });
-//         console.log(photo);
-//         const resizedPhoto = await ImageManipulator.manipulateAsync(
-//           photo.uri,
-//           [{ resize: { width: 640, height: 480 } }],
-//           { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
-//         );
-//         const imageElement = new Image();
-//         imageElement.src = resizedPhoto.uri;
-//         imageElement.onload = () => {
-//           const tfImage = tf.browser.fromPixels(imageElement);
-//           console.log(tfImage);
-
-//           const expanded = tfImage.expandDims(0);
-//           const obj = model.predict(expanded);
-
-//           // Rest of your code...
-
-//           tf.dispose(tfImage);
-//           tf.dispose(expanded);
-//           tf.dispose(obj);
-//         };
-//         // const tfImage = tf.browser.fromPixels({
-//         //   data: new Uint32Array(resizedPhoto.width * resizedPhoto.height),
-//         //   width: resizedPhoto.width,
-//         //   height: resizedPhoto.height,
-//         // });
-
-//         // const predictResult = await model.predict(tf.browser.fromPixels(photo));
-//         // const img = tf.browser.fromPixels(photo);
-
-//         // const expanded = tfImage.expandDims(0);
-//         // const obj = await model.executeAsync(expanded);
-//         // console.log(obj, "object");
-//         // const boxes = await obj[1].array();
-//         //  /     const classes = await obj[2].array();
-//         // const scores = await obj[4].array();
-//         //
-//         // const ctx = cameraRef.current._cameraRef._canvasContext; // Accessing internal canvas context
-
-//         // ctx.clearRect(0, 0, width, height);
-
-//         // drawRect(boxes[0], classes[0], scores[0], 0.8, ctx);
-
-//         // tf.dispose(photo);
-//         // tf.dispose(img);
-//         // tf.dispose(expanded);
-//         // tf.dispose(obj);
-//       }
-
-//       // requestAnimationFrame(loop);
-//     };
-
-//     loop();
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       <Camera
-//         style={styles.camera}
-//         ref={cameraRef}
-//         type={Camera.Constants.Type.back}
-//       />
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     flexDirection: "column",
-//   },
-//   camera: {
-//     flex: 1,
-//   },
-// });
-
-// export default App;
