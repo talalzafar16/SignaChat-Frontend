@@ -22,8 +22,7 @@ export default function StackNavigator() {
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
-      // initialRouteName={InitialData.name ? "Home" : "Login"}
-      initialRouteName={InitialData.name ? "sldictionary" : "sldictionary"}
+      initialRouteName={InitialData.name ? "Home" : "Login"}
     >
       <Stack.Screen name="Splash" component={SplashScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />

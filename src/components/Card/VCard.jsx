@@ -1,16 +1,30 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Video } from 'react-native-video';
+import React, { useRef, useState } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { Video, ResizeMode } from "expo-av";
 
 const VideoCard = ({ title, videoFileName }) => {
+  const videoRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(true);
+
+  const onPlaybackStatusUpdate = (status) => {
+    if (status.didJustFinish) {
+      // Video has finished playing, restart it
+      videoRef.current.replayAsync();
+    }
+  };
 
   return (
     <View style={styles.card}>
       <Video
-        source={{uri:videoFileName}}
+        ref={videoRef}
+        source={{
+          uri: videoFileName,
+        }}
         style={styles.video}
-        controls={true}
-        resizeMode="cover"
+        resizeMode={ResizeMode.CONTAIN}
+        shouldPlay={isPlaying}
+        onPlaybackStatusUpdate={onPlaybackStatusUpdate}
+        
       />
       <View style={styles.textContainer}>
         <Text style={styles.title}>{title}</Text>
@@ -21,21 +35,23 @@ const VideoCard = ({ title, videoFileName }) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 8,
-    overflow: 'hidden',
+    overflow: "hidden",
     margin: 8,
+    height:190,
   },
   video: {
-    width: '100%',
-    aspectRatio: 16 / 9,
+    width: "100%",
+    aspectRatio: 15 / 7,
   },
   textContainer: {
-    padding: 16,
+    padding: 1,
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
 
