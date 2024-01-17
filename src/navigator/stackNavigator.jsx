@@ -15,13 +15,15 @@ import RegisterScreen from "../screens/RegitserScreen";
 import Chat from "../screens/HomeScreen/Chat";
 import Message from "../screens/HomeScreen/Message";
 import { useSelector } from "react-redux";
+import Sldictionary from "../screens/Dictionary/Sldictionary";
 export default function StackNavigator() {
   const Stack = createNativeStackNavigator();
   const InitialData = useSelector((state) => state.data);
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName={InitialData.name ? "Home" : "Login"}
+      // initialRouteName={InitialData.name ? "Home" : "Login"}
+      initialRouteName={InitialData.name ? "sldictionary" : "sldictionary"}
     >
       <Stack.Screen name="Splash" component={SplashScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
@@ -48,6 +50,8 @@ export default function StackNavigator() {
         options={{ headerShown: true }}
       />
       <Stack.Screen name="Chat" component={Chat} />
+      <Stack.Screen name="sldictionary" component={Sldictionary} />
+
       <Stack.Screen
         name="Camera"
         component={Message}

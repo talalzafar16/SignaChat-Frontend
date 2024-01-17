@@ -144,7 +144,10 @@ const AnimatedModal = ({ isVisible, onClose, navigation }) => {
           style={[styles.modalContainer, { height: animatedHeight }]}
         >
           {/* Content of your modal goes here */}
-          <TouchableOpacity style={{ position: "absolute", width: "100%" }}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("sldictionary")}
+            style={{ position: "absolute", width: "100%" }}
+          >
             <Text
               style={{
                 color: "white",
