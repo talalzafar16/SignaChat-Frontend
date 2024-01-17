@@ -15,7 +15,6 @@ import { DialogCustomColors } from "../src/config/colors";
 
 function ComponentContact({ item, refetch, setRefetch }) {
   const InitialData = useSelector((state) => state.data);
-  // console.log(InitialData);
   const [flag, setFlag] = useState(false);
   const AddContact = (id) => {
     fetch(

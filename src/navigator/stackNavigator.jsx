@@ -18,7 +18,6 @@ import { useSelector } from "react-redux";
 export default function StackNavigator() {
   const Stack = createNativeStackNavigator();
   const InitialData = useSelector((state) => state.data);
-  console.log(InitialData);
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
